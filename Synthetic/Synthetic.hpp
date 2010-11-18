@@ -32,5 +32,6 @@
 #include "Allocator.hpp"
 #include "SmartType.hpp"
 #include "WinException.hpp"
+#include "Types.hpp"
 
 #endif //SYNTHETIC_SYNTHETIC_HPP
