@@ -34,6 +34,7 @@
 
 //Synthetic Header Files:
 #include "Types.hpp"
+#include "TlhelpIterator.hpp"
 
 namespace Synthetic
 {
@@ -56,6 +57,8 @@ namespace Synthetic
 	class Process
 	{
 	public:
+
+		typedef ProcessIterator iterator;
 
 		/**********************************************************************
 		***********************************************************************
