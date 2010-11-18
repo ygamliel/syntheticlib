@@ -53,23 +53,24 @@ public:
 													errorCode_(errorCode)
 	{
 		//Create a describing error string
-		char* errString = NULL;
-		DWORD ec = FormatMessageA(	FORMAT_MESSAGE_ALLOCATE_BUFFER |
-											FORMAT_MESSAGE_FROM_SYSTEM,
+		std::vector<char> buffer(MAX_PATH);
+		DWORD flags = FORMAT_MESSAGE_FROM_SYSTEM | FORMAT_MESSAGE_IGNORE_INSERTS;
+		DWORD ec = FormatMessageA(	flags,
 											NULL,
 											errorCode,
-											0,
-											errString,
-											0,
+											MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT),
+											&buffer[0],
+											buffer.size(),
 											NULL);
+		std::string errString;
+		ec ?	errString.assign(buffer.begin(), buffer.begin() + ec) :
+				errString.assign("Unknown Error");
 
 		//Format a meaningfull error message
 		std::stringstream errorMessage;
 		errorMessage << causedIn_ << " Error : " << failedName_ <<
 		" failed with errorcode " << errorCode_ << "(" << 
-		(ec ? errString : "Unknown Error") << ")";
-
-		LocalFree(errString);
+		(ec ? &buffer[0] : "Unknown Error") << ")";
 
 		formattedError_.assign(errorMessage.str());
 	}
