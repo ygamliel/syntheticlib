@@ -36,6 +36,7 @@
 //Synthetic header files:
 #include "Types.hpp"
 #include "WinException.hpp"
+#include "Auxiliary.hpp"
 
 namespace Synthetic
 {
@@ -93,6 +94,25 @@ namespace Synthetic
 		*/
 		TlhelpIterator() : state_(FALSE), snapshot_(0)
 		{ }
+
+		/**
+		* Copyconstructor for deep copy.
+		* @param it TlhelpIterator to copy.
+		*/
+		TlhelpIterator(const TlhelpIterator& it)
+		{
+			if(!it.isInValidState())
+			{
+				state_		= FALSE;
+				snapshot_	= 0;
+			}
+			else
+			{
+				state_		= TRUE;
+				snapshot_	= Aux::duplicateHandleLocal(it.snapshot_);
+				entry_		= it.entry_;
+			}
+		}
 
 		/**
 		* Simple destructor freeing resources.

@@ -32,6 +32,7 @@
 #include <string>
 #include <exception>
 #include <sstream>
+#include <vector>
 
 namespace Synthetic {
 

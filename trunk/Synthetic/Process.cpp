@@ -25,6 +25,7 @@
 #include "Process.hpp"
 #include "TlhelpIterator.hpp"
 #include "SmartType.hpp"
+#include "Auxiliary.hpp"
 
 using namespace std;
 using namespace Synthetic;
@@ -70,22 +71,22 @@ ProcessId Process::getProcessByName(wstring processName)
 					towlower);
 
 	//Iterate the complete process-list
-	for(ProcessIterator it(0); it != ProcessIterator(); ++it)
+	ProcessId id = 0;
+	for_each(ProcessIterator(0), ProcessIterator(), [&](PROCESSENTRY32W cur)
 	{
 		//Convert current name to lowercase
-		wstring currentProcess(it->szExeFile);
-		transform(	currentProcess.begin(),
-						currentProcess.end(),
-						currentProcess.begin(),
+		wstring curName(cur.szExeFile);
+		transform(	curName.begin(),
+						curName.end(),
+						curName.begin(),
 						tolower);
 
 		//Compare
-		if(currentProcess == processName)
-			return it->th32ProcessID;
-	}
+		if(curName == processName)
+			id = cur.th32ProcessID;
+	});
 
-	//In case of failure return zero
-	return 0;
+	return id;
 }
 
 ProcessId Process::getProcessByWindowHandle(HWND windowHandle)
@@ -166,20 +167,7 @@ Process::Process(const Process& proc)
 	//Duplicate handle to avoid it getting invalid if the
 	//original objects destructor gets called
 	if(proc.handle_)
-	{
-		if(!DuplicateHandle(	GetCurrentProcess(),
-									proc.handle_,
-									GetCurrentProcess(),
-									&handle_,
-									NULL,
-									FALSE,
-									DUPLICATE_SAME_ACCESS))
-		{
-			throw WinException(	"Process::Process()",
-										"DuplicateHandle()",
-										GetLastError());
-		}
-	}
+		handle_ = Aux::duplicateHandleLocal(proc.handle_);
 
 	id_ = proc.id_;
 }

@@ -21,6 +21,7 @@
 //Synthetic header files:
 #include "Thread.hpp"
 #include "WinException.hpp"
+#include "Auxiliary.hpp"
 
 using namespace Synthetic;
 
@@ -45,27 +46,15 @@ Thread::Thread(const Thread& thread) : handle_(NULL), id_(thread.id_)
 	//Duplicate handle to avoid it getting invalid if the
 	//original objects destructor gets called
 	if(thread.handle_)
-	{
-		if(!DuplicateHandle(	GetCurrentProcess(),
-									thread.handle_,
-									GetCurrentProcess(),
-									&handle_,
-									NULL,
-									FALSE,
-									DUPLICATE_SAME_ACCESS))
-		{
-			throw WinException(	"Thread::Thread()",
-										"DuplicateHandle()",
-										GetLastError());
-		}
-	}
+		handle_ = Aux::duplicateHandleLocal(thread.handle_);
+
+	id_ = thread.id_;
 }
 
 Thread::~Thread()
 {
 	close();
 }
-
 
 void Thread::open(ThreadId id)
 {
