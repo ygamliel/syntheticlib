@@ -22,42 +22,37 @@
 	#pragma once
 #endif
 
-#ifndef SYNTHETIC_PROCESS_TYPES_HPP
-#define SYNTHETIC_PROCESS_TYPES_HPP
+#ifndef SYNTHETIC_PROCESS_SYSTEM_HPP
+#define SYNTHETIC_PROCESS_SYSTEM_HPP
 
-//Synthetic Header files:
-#include "Os.hpp"
+#if defined(linux)
+	#define SYNTHETIC_ISLINUX
+#elif defined(WIN32)
+	#define SYNTHETIC_ISWINDOWS
+	#define SYNTHETIC_ISWIN32
+#else
+	#error [Synthetic] Unsupported platform
+#endif
 
-namespace Synthetic
-{
-	//Signed integer types
-	typedef char		int8_t;
-	typedef short		int16_t;
-	typedef int			int32_t;
-	typedef long long	int64_t;
+#if defined(_M_X64) || defined(__LP64__)
+	#define SYNTHETIC_ISX64
+#elif defined(_M_IX86) || defined(__i386__)
+	#define SYNTHETIC_ISX86
+#else
+	#error [Synthetic] Unsupported platform and/or compiler
+#endif
 
-	//Unsigned integer types
-	typedef unsigned char		uint8_t;
-	typedef unsigned short		uint16_t;
-	typedef unsigned int			uint32_t;
-	typedef unsigned long long	uint64_t;
+#if defined(SYNTHETIC_ISX64)
+	#define SYNTHETIC_IS64BIT
+	#define SYNTHETIC_PLATFORMBITS 64
+#elif defined(SYNTHETIC_ISX86)
+	#define SYNTHETIC_IS32BIT
+	#define SYNTHETIC_PLATFORMBITS 32
+#else
+	#error [Synthetic] Unsupported platform and/or compiler
+#endif
 
-	//Other integer types
-	typedef uint8_t	byte_t;
-	typedef uint16_t	word_t;
-	typedef uint32_t	dword_t;
-	typedef uint64_t	qword_t;
-
-	//Pointer types
-	//typedef Os::ulongptr_t ulongptr_t;
-	typedef dword_t			ptr32_t;
-	typedef qword_t			ptr64_t;
-	//typedef ulongptr_t		ptr_t;
-	typedef DWORD_PTR			ptr_t;
-	typedef ptr_t				address_t;
-}
-
-#endif //SYNTHETIC_PROCESS_TYPES_HPP
+#endif //SYNTHETIC_PROCESS_SYSTEM_HPP
 
 /******************
 ******* EOF *******
