@@ -164,10 +164,13 @@
     <ClInclude Include="Auxiliary.hpp" />
     <ClInclude Include="Module.hpp" />
     <ClInclude Include="ModuleManager.hpp" />
+    <ClInclude Include="Os.hpp" />
+    <ClInclude Include="Os_Windows.hpp" />
     <ClInclude Include="PeFileView.hpp" />
     <ClInclude Include="Process.hpp" />
     <ClInclude Include="SmartType.hpp" />
     <ClInclude Include="Synthetic.hpp" />
+    <ClInclude Include="System.hpp" />
     <ClInclude Include="Thread.hpp" />
     <ClInclude Include="ThreadManager.hpp" />
     <ClInclude Include="TlhelpIterator.hpp" />
