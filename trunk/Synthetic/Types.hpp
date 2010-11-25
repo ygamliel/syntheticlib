@@ -27,7 +27,11 @@
 
 #include "System.hpp"
 
-#include <Windows.h>
+#if defined(SYNTHETIC_ISWINDOWS)
+	#include <Windows.h>
+#elif defined(SYNTHETIC_ISLINUX)
+	#include <sys/types.h>
+#endif
 
 namespace Synthetic
 {
@@ -63,13 +67,13 @@ namespace Synthetic
 	//System specific types
 	#if defined(SYNTHETIC_ISWINDOWS)
 
-		typedef dword_t	pid_t;
-		typedef dword_t	tid_t;
+		typedef ::DWORD	pid_t;
+		typedef ::DWORD	tid_t;
 
 	#elif defined(SYNTHETIC_ISLINUX)
 
-		typedef int32_t	pid_t;
-		typedef int32_t	tid_t;
+		typedef ::pid_t	pid_t;
+		typedef ::pid_t	tid_t;
 
 	#endif
 
