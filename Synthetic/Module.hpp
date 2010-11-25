@@ -72,9 +72,9 @@ namespace Synthetic
 
 		/**
 		* Returns the address the module was loaded.
-		* @return address_t The modules loadaddress.
+		* @return ptr_t The modules loadaddress.
 		*/
-		address_t getBaseAddress() const;
+		ptr_t getBaseAddress() const;
 
 		/**
 		* Returns the modules size.
@@ -116,7 +116,7 @@ namespace Synthetic
 		***********************************************************************
 		**********************************************************************/
 
-		address_t baseAddress_;
+		ptr_t baseAddress_;
 		size_t size_;
 		std::wstring moduleName_;
 		std::wstring modulePath_;

@@ -70,10 +70,10 @@ namespace Synthetic
 		/**
 		* Allocates memory
 		* @param count The count of elements of typ data_t to allocate
-		* @return address_t Address of the allocated memory
+		* @return ptr_t Address of the allocated memory
 		*/
 		template<typename data_t>
-		address_t allocate(size_t count)
+		ptr_t allocate(size_t count)
 		{
 			//Get memory
 			void* allocatedMemory = VirtualAllocEx(	proc_.getHandle(),
@@ -89,7 +89,7 @@ namespace Synthetic
 											error);
 			}
 
-			address_t temp = reinterpret_cast<address_t>(allocatedMemory);
+			ptr_t temp = reinterpret_cast<ptr_t>(allocatedMemory);
 
 			//If case scoped_release was specified we need to store the pointer
 			if(scoped_release)
@@ -102,7 +102,7 @@ namespace Synthetic
 		* Frees memory
 		* @param ptr Address of the memory to deallocate
 		*/
-		void deallocate(address_t ptr)
+		void deallocate(ptr_t ptr)
 		{
 			//Free memory
 			int ec = VirtualFreeEx(	proc_.getHandle(),
@@ -151,8 +151,8 @@ namespace Synthetic
 
 	private:
 		const Process& proc_;
-		std::list<address_t> allocations_;
-		typedef std::list<address_t>::iterator AllocIter;
+		std::list<ptr_t> allocations_;
+		typedef std::list<ptr_t>::iterator AllocIter;
 	};
 
 	typedef Allocator<true>		ScopedAllocator;

@@ -25,8 +25,9 @@
 #ifndef SYNTHETIC_PROCESS_TYPES_HPP
 #define SYNTHETIC_PROCESS_TYPES_HPP
 
-//Synthetic Header files:
-#include "Os.hpp"
+#include "System.hpp"
+
+#include <Windows.h>
 
 namespace Synthetic
 {
@@ -49,12 +50,29 @@ namespace Synthetic
 	typedef uint64_t	qword_t;
 
 	//Pointer types
-	//typedef Os::ulongptr_t ulongptr_t;
+	#if defined(SYNTHETIC_IS32BIT)
+		typedef dword_t		ulongptr_t;
+	#elif defined(SYNTHETIC_IS64BIT)
+		typedef qword_t		ulongptr_t;
+	#endif
+
 	typedef dword_t			ptr32_t;
 	typedef qword_t			ptr64_t;
-	//typedef ulongptr_t		ptr_t;
-	typedef DWORD_PTR			ptr_t;
-	typedef ptr_t				address_t;
+	typedef ulongptr_t		ptr_t;
+
+	//System specific types
+	#if defined(SYNTHETIC_ISWINDOWS)
+
+		typedef dword_t	pid_t;
+		typedef dword_t	tid_t;
+
+	#elif defined(SYNTHETIC_ISLINUX)
+
+		typedef int32_t	pid_t;
+		typedef int32_t	tid_t;
+
+	#endif
+
 }
 
 #endif //SYNTHETIC_PROCESS_TYPES_HPP

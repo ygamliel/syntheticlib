@@ -44,7 +44,7 @@ size_t ThreadManager::getAllThreads(std::vector<Thread>& dest) const
 	return dest.size() - previousSize;
 }
 
-Thread ThreadManager::createThread(	address_t procedure, address_t param,
+Thread ThreadManager::createThread(	ptr_t procedure, ptr_t param,
 												bool suspended, dword_t waitingTime) const
 {
 	//Prepare Arguments

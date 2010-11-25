@@ -63,7 +63,7 @@ namespace Synthetic
 		* @param pid Specify a process id for which data should be iterated.
 		* Passing zero will iterate all specific resources on the system.
 		*/
-		TlhelpIterator(ProcessId pid)
+		TlhelpIterator(pid_t pid)
 		{
 			//Get a snapshot
 			entry_.dwSize = sizeof(entry_t);

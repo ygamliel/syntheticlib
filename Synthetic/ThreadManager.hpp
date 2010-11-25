@@ -75,8 +75,8 @@ namespace Synthetic
 		*the execution of the new thread in milliseconds
 		*@return Thread A thread object
 		*/
-		Thread createThread(	address_t procedure,
-									address_t param = 0,
+		Thread createThread(	ptr_t procedure,
+									ptr_t param = 0,
 									bool suspended = false,
 									dword_t waitingTime = 0) const;
 
