@@ -36,9 +36,6 @@
     <ClCompile Include="TlhelpIterator.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="PeFileView.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="Auxiliary.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -75,9 +72,6 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="WinException.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
-    <ClInclude Include="PeFileView.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="Auxiliary.hpp">
