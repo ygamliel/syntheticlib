@@ -153,7 +153,7 @@
     <ClCompile Include="Module.cpp" />
     <ClCompile Include="ModuleManager.cpp" />
     <ClCompile Include="PeFileView.cpp" />
-    <ClCompile Include="Process.cpp" />
+    <ClCompile Include="Process_Win32.cpp" />
     <ClCompile Include="SmartType.cpp" />
     <ClCompile Include="Thread.cpp" />
     <ClCompile Include="ThreadManager.cpp" />
@@ -164,8 +164,6 @@
     <ClInclude Include="Auxiliary.hpp" />
     <ClInclude Include="Module.hpp" />
     <ClInclude Include="ModuleManager.hpp" />
-    <ClInclude Include="Os.hpp" />
-    <ClInclude Include="Os_Windows.hpp" />
     <ClInclude Include="PeFileView.hpp" />
     <ClInclude Include="Process.hpp" />
     <ClInclude Include="SmartType.hpp" />

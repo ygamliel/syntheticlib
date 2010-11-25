@@ -82,7 +82,7 @@ namespace Synthetic
 		* Opens a thread by an id
 		* @param id The Id of the thread you want to attach
 		*/
-		Thread(ThreadId id);
+		Thread(tid_t id);
 
 		/**
 		* Copy constructor
@@ -102,7 +102,7 @@ namespace Synthetic
 		* the new thread opened.
 		* @param id The id of the thread you want to attach.
 		*/
-		void open(ThreadId id);
+		void open(tid_t id);
 
 		/**
 		* Closes the current threadhandle
@@ -111,9 +111,9 @@ namespace Synthetic
 
 		/**
 		* Retrieves the Id.
-		* @return ThreadId The attached thread's Id.
+		* @return tid_t The attached thread's Id.
 		*/
-		ThreadId getId() const;
+		tid_t getId() const;
 
 		/**
 		* Retrieves the low level threadhandle for use in WinAPI functions.
@@ -174,7 +174,7 @@ namespace Synthetic
 		* context are retrieved.
 		* @return context_t The appropriate context of the thread.
 		*/
-		context_t getContext(unsigned long contextFlags) const;
+		CONTEXT getContext(unsigned long contextFlags) const;
 
 		/**
 		* Sets the context for the thread.
@@ -182,7 +182,7 @@ namespace Synthetic
 		* @param unsigned long Specifies which portions of the thread's
 		* context are retrieved.
 		*/
-		void setContext(	context_t& newContext,
+		void setContext(	CONTEXT& newContext,
 								unsigned long contextFlags) const;
 
 		/**
@@ -201,7 +201,7 @@ namespace Synthetic
 		***********************************************************************
 		**********************************************************************/
 
-		ThreadId id_;
+		tid_t id_;
 		handle_t handle_;
 	};
 }

@@ -71,7 +71,7 @@ namespace Synthetic
 		*is associated to
 		*@return The found process' PID
 		*/
-		static ProcessId getProcessByForegroundWindow();
+		static pid_t getProcessByForegroundWindow();
 
 		/**
 		*Retrieves the PID of the first found window with a given name
@@ -79,7 +79,7 @@ namespace Synthetic
 		*@param windowName Case-insensitive window name
 		*@return The found process' PID
 		*/
-		static ProcessId getProcessByWindowName(const std::wstring& windowName);
+		static pid_t getProcessByWindowName(const std::wstring& windowName);
 
 		/**
 		*Retrieves the PID of the first found process with a given name
@@ -88,20 +88,20 @@ namespace Synthetic
 		*@param processName Case-insensitive process name
 		*@return The found process' PID
 		*/
-		static ProcessId getProcessByName(std::wstring processName);
+		static pid_t getProcessByName(std::wstring processName);
 
 		/**
 		*Retrieves the PID of the process associated to a windowhandle
 		*@param windowHandle A WinAPI window handle
 		*@return A found process' PID or zero in case of error
 		*/
-		static ProcessId getProcessByWindowHandle(HWND windowHandle);
+		static pid_t getProcessByWindowHandle(HWND windowHandle);
 
 		/**
 		*Retrieves the PID of the current process
 		*@return The current process' PID
 		*/
-		static ProcessId getCurrentProcess();
+		static pid_t getCurrentProcess();
 
 		/**
 		*Retrieves the PIDs of all running processes by a name
@@ -110,14 +110,14 @@ namespace Synthetic
 		*@return size_t Number of found processes
 		*/
 		static size_t getProcessListByName(	std::wstring processName,
-														ProcessList& dest);
+														std::vector<pid_t>& dest);
 
 		/**
 		*Retrieves the PIDs of all running processes
 		*@param dest Reference to a vector to hold all found PIDs
 		*@return size_t Number of found processes
 		*/
-		static size_t getProcessList(ProcessList& dest);
+		static size_t getProcessList(std::vector<pid_t>& dest);
 
 		/**********************************************************************
 		***********************************************************************
@@ -135,9 +135,9 @@ namespace Synthetic
 		* Optional constructor.
 		* Initializes the current process for work with other processes and opens
 		* the targeted process.
-		* @param processId The PID of the process you want to attach.
+		* @param pid_t The PID of the process you want to attach.
 		*/
-		Process(ProcessId pid);
+		Process(pid_t pid);
 
 		/**
 		* Copy constructor.
@@ -156,9 +156,9 @@ namespace Synthetic
 		/**
 		* []-operator to read pointers from the remote process.
 		* @param address A valid 32/64-bit memoryaddress.
-		* @return address_t The memoryread's content.
+		* @return ptr_t The memoryread's content.
 		*/
-		address_t operator[](address_t address) const;
+		ptr_t operator[](ptr_t address) const;
 
 		/**
 		* Retrieves the low level processhandle for use in WinAPI functions.
@@ -172,9 +172,9 @@ namespace Synthetic
 
 		/**
 		* Retrieves the PID.
-		* @return ProcessId The attached process' PID.
+		* @return pid_t The attached process' PID.
 		*/
-		ProcessId getId() const;
+		pid_t getId() const;
 
 		/**
 		* Creates a new process and opens it.
@@ -192,9 +192,9 @@ namespace Synthetic
 		* is not wanted.
 		* @param waitingTime (optional) The time in ms the function waits for
 		* the newly created process.
-		* @return ProcessId The new process' PID
+		* @return pid_t The new process' PID
 		*/
-		ProcessId createProcessAndOpen(	const std::wstring& applicationName,
+		pid_t createProcessAndOpen(	const std::wstring& applicationName,
 													const std::wstring& commandLine = L"",
 													const std::wstring directory = L"",
 													bool suspended = false,
@@ -204,9 +204,9 @@ namespace Synthetic
 		* Opens a process by a PID.
 		* If a process is already opened, it will get closed and 
 		* the new process opened.
-		* @param processId The PID of the process you want to attach.
+		* @param pid_t The PID of the process you want to attach.
 		*/
-		void open(ProcessId pid);
+		void open(pid_t pid);
 
 		/**
 		* Closes handles to the current process.
@@ -228,11 +228,11 @@ namespace Synthetic
 		* @return size_t The amount of written data.
 		*/
 		template<typename data_t>
-		size_t rawRead(	const address_t source,
+		size_t rawRead(	const ptr_t source,
 								data_t* dest,
 								const size_t amount) const
 		{
-			ptr_t bytesRead;
+			SIZE_T bytesRead;
 			int ec = ::ReadProcessMemory(	handle_,
 													reinterpret_cast<const void*>(source),
 													static_cast<void*>(dest),
@@ -255,7 +255,7 @@ namespace Synthetic
 		* @return data_t The read data.
 		*/
 		template <typename data_t>
-		data_t readMemory(address_t address) const
+		data_t readMemory(ptr_t address) const
 		{
 			data_t returnedBytes;
 			rawRead(address, &returnedBytes, sizeof(data_t));
@@ -271,7 +271,7 @@ namespace Synthetic
 		* @return size_t Length of the read zero terminated string
 		*/
 		template <typename char_t>
-		size_t readString(	address_t address,
+		size_t readString(	ptr_t address,
 									size_t amountChars,
 									std::basic_string<char_t>& dest) const
 		{
@@ -293,11 +293,11 @@ namespace Synthetic
 		* @return size_t The amount of written bytes.
 		*/
 		template<typename data_t>
-		size_t rawWrite(	const address_t dest,
+		size_t rawWrite(	const ptr_t dest,
 								const data_t* source,
 								const size_t amount) const
 		{
-			address_t bytesWritten;
+			SIZE_T bytesWritten;
 			int ec = ::WriteProcessMemory(	handle_,
 														reinterpret_cast<void*>(dest),
 														static_cast<const void*>(source),
@@ -321,7 +321,7 @@ namespace Synthetic
 		* @return size_t The amount of written bytes.
 		*/
 		template <typename data_t>
-		size_t writeMemory(	const address_t dest,
+		size_t writeMemory(	const ptr_t dest,
 									const data_t& value) const
 		{
 			return rawWrite(address, &value, sizeof(value));
@@ -334,7 +334,7 @@ namespace Synthetic
 		* @return size_t The amount of written bytes.
 		*/
 		template <typename char_t>
-		size_t writeString(	const address_t address,
+		size_t writeString(	const ptr_t address,
 									const std::basic_string<char_t>& value) const
 		{
 			if(!value.length())
@@ -364,7 +364,7 @@ namespace Synthetic
 		**********************************************************************/
 
 		handle_t		handle_;
-		ProcessId	id_;
+		pid_t	id_;
 	};
 }
 

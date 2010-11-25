@@ -40,14 +40,14 @@ Module::Module()
 
 void Module::read(const MODULEENTRY32W& mod)
 {
-	baseAddress_ = reinterpret_cast<address_t>(mod.modBaseAddr);
+	baseAddress_ = reinterpret_cast<ptr_t>(mod.modBaseAddr);
 	size_ = mod.modBaseSize;
 	moduleName_.assign(mod.szModule);
 	modulePath_.assign(mod.szExePath);
 	isManuallyMapped_ = false;
 }
 
-address_t Module::getBaseAddress() const
+ptr_t Module::getBaseAddress() const
 {
 	return baseAddress_;
 }

@@ -61,7 +61,7 @@ public:
 											errorCode,
 											MAKELANGID(LANG_NEUTRAL, SUBLANG_DEFAULT),
 											&buffer[0],
-											buffer.size(),
+											static_cast<DWORD>(buffer.size()),
 											NULL);
 		std::string errString;
 		ec ?	errString.assign(buffer.begin(), buffer.begin() + ec) :

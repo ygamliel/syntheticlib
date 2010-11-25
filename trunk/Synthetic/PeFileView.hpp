@@ -79,7 +79,7 @@ namespace Synthetic
 
 			//Read nt header image
 			PELIB_IMAGE_NT_HEADERS<bits> ntHeader;
-			address_t ntOffset = mzHeader_.getAddressOfPeHeader();
+			ptr_t ntOffset = mzHeader_.getAddressOfPeHeader();
 			ntHeader = readFileOffset<PELIB_IMAGE_NT_HEADERS<bits>>(ntOffset);
 
 			//Calculate nt header size
@@ -93,7 +93,7 @@ namespace Synthetic
 			proc_.rawRead(modBase_ + ntOffset, &buffer[0], buffer.size());
 
 			//Read pe header
-			peHeader_.read(&buffer[0], buffer.size(), 0);
+			peHeader_.read(&buffer[0], static_cast<unsigned int>(buffer.size()), 0);
 			if(!peHeader_.isValid())
 			{
 				throw runtime_error( "PeFileView::PeFileView() Error : " \
@@ -116,7 +116,7 @@ namespace Synthetic
 		* Returns the memory address the module was loaded at
 		* @return The modules base address
 		*/
-		address_t getModuleBase() const
+		ptr_t getModuleBase() const
 		{
 			return modBase_;
 		}
@@ -160,7 +160,7 @@ namespace Synthetic
 		}
 
 	private:
-		address_t		modBase_;
+		ptr_t		modBase_;
 		const Process& proc_;
 
 		PeLib::MzHeader			mzHeader_;

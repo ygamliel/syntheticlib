@@ -18,6 +18,10 @@
 	Copyright (C) [2010] [Ethon <Ethon@list.ru>]
 */
 
+#include "System.hpp"
+
+#if defined(SYNTHETIC_ISWINDOWS)
+
 //C++ header files:
 #include <algorithm>
 
@@ -36,7 +40,7 @@ using namespace Synthetic;
 ***********************************************************************
 **********************************************************************/
 
-ProcessId Process::getProcessByForegroundWindow()
+pid_t Process::getProcessByForegroundWindow()
 {
 	//Get a handle to the foreground window
 	HWND windowHandle = GetForegroundWindow();
@@ -44,12 +48,12 @@ ProcessId Process::getProcessByForegroundWindow()
 		return 0;
 
 	//Resolve the handle to its associated ID and return it
-	ProcessId pid;
+	DWORD pid;
 	GetWindowThreadProcessId(windowHandle, &pid);
 	return pid;
 }
 
-ProcessId Process::getProcessByWindowName(const wstring& windowName)
+pid_t Process::getProcessByWindowName(const wstring& windowName)
 {
 	//Get a handle to the specified window
 	HWND windowHandle = FindWindowW(NULL, windowName.c_str());
@@ -57,12 +61,12 @@ ProcessId Process::getProcessByWindowName(const wstring& windowName)
 		return 0;
 
 	//Resolve the handle to its associated ID and return it
-	ProcessId pid;
+	DWORD pid;
 	GetWindowThreadProcessId(windowHandle, &pid);
 	return pid;
 }
 
-ProcessId Process::getProcessByName(wstring processName)
+pid_t Process::getProcessByName(wstring processName)
 {
 	//Convert given name to lowercase
 	transform(	processName.begin(),
@@ -71,7 +75,7 @@ ProcessId Process::getProcessByName(wstring processName)
 					towlower);
 
 	//Iterate the complete process-list
-	ProcessId id = 0;
+	pid_t id = 0;
 	for_each(ProcessIterator(0), ProcessIterator(), [&](PROCESSENTRY32W cur)
 	{
 		//Convert current name to lowercase
@@ -89,20 +93,20 @@ ProcessId Process::getProcessByName(wstring processName)
 	return id;
 }
 
-ProcessId Process::getProcessByWindowHandle(HWND windowHandle)
+pid_t Process::getProcessByWindowHandle(HWND windowHandle)
 {
 	//Resolve the handle to its associated ID and return it
-	ProcessId pid;
+	DWORD pid;
 	GetWindowThreadProcessId(windowHandle, &pid);
 	return pid;
 }
 
-ProcessId Process::getCurrentProcess()
+pid_t Process::getCurrentProcess()
 {
 	return GetCurrentProcessId();
 }
 
-size_t Process::getProcessListByName(wstring processName, ProcessList& dest)
+size_t Process::getProcessListByName(wstring processName, std::vector<pid_t>& dest)
 {
 	size_t previousSize = dest.size();
 
@@ -131,7 +135,7 @@ size_t Process::getProcessListByName(wstring processName, ProcessList& dest)
 	return dest.size() - previousSize;
 }
 
-size_t Process::getProcessList(ProcessList& dest)
+size_t Process::getProcessList(std::vector<pid_t>& dest)
 {
 	size_t previousSize = dest.size();
 
@@ -153,7 +157,7 @@ Process::Process() : handle_(NULL), id_(0)
 	addDebugPrivileges_();
 }
 
-Process::Process(ProcessId pid) : handle_(NULL)
+Process::Process(pid_t pid) : handle_(NULL)
 {
 	addDebugPrivileges_();
 	open(pid);
@@ -177,9 +181,9 @@ Process::~Process()
 	close(); 
 }
 
-address_t Process::operator[](address_t address) const
+ptr_t Process::operator[](ptr_t address) const
 {
-	return readMemory<address_t>(address);
+	return readMemory<ptr_t>(address);
 }
 
 HANDLE Process::getHandle() const
@@ -187,12 +191,12 @@ HANDLE Process::getHandle() const
 	return handle_;
 }
 
-ProcessId Process::getId() const
+pid_t Process::getId() const
 {
 	return id_;
 }
 
-ProcessId Process::createProcessAndOpen(	const wstring& applicationName,
+pid_t Process::createProcessAndOpen(	const wstring& applicationName,
 														const wstring& commandLine,
 														const wstring directory,
 														bool suspended,
@@ -249,7 +253,7 @@ ProcessId Process::createProcessAndOpen(	const wstring& applicationName,
 	return id_;
 }
 
-void Process::open(ProcessId pid)
+void Process::open(pid_t pid)
 {
 	close();
 
@@ -339,6 +343,8 @@ void Process::addDebugPrivileges_() const
 									GetLastError());
 	}
 }
+
+#endif //defined(SYNTHETIC_ISWINDOWS)
 
 /******************
 ******* EOF *******

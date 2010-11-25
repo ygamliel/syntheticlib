@@ -100,7 +100,7 @@ Module ModuleManager::injectModule(const wstring& dllPath) const
 {
 	//Write path into targets memory
 	ScopedAllocator allocator(proc_);
-	address_t mem = allocator.allocate<wchar_t>(dllPath.length() + 1);
+	ptr_t mem = allocator.allocate<wchar_t>(dllPath.length() + 1);
 	proc_.writeString<wchar_t>(mem, dllPath);
 
 	//Fetch kernel32.dll
@@ -144,10 +144,10 @@ void ModuleManager::ejectModule(Module& mod)
 
 dword_t ModuleManager::callModuleExport(	const Module& mod,
 														const string& exportName,
-														address_t param) const
+														ptr_t param) const
 {
 	//Fetch export address
-	address_t exportAddress = getModuleExportAddress(mod, exportName);
+	ptr_t exportAddress = getModuleExportAddress(mod, exportName);
 
 	//Create a thread
 	ThreadManager threads(proc_);
@@ -158,7 +158,7 @@ dword_t ModuleManager::callModuleExport(	const Module& mod,
 	return thread.getExitCode();
 }
 
-address_t ModuleManager::getModuleExportAddress(	const Module& mod,
+ptr_t ModuleManager::getModuleExportAddress(	const Module& mod,
 																const string& exportName) const
 {
 	//Load module as data for local read
@@ -175,7 +175,7 @@ address_t ModuleManager::getModuleExportAddress(	const Module& mod,
 
 	//Retrieve exported address
 	FARPROC exportAddressTemp = GetProcAddress(module, exportName.c_str());
-	address_t exportAddress = reinterpret_cast<address_t>(exportAddressTemp);
+	ptr_t exportAddress = reinterpret_cast<ptr_t>(exportAddressTemp);
 	if (!exportAddress)
 	{
 		throw WinException(	"Module::getExportAddress()",
@@ -184,7 +184,7 @@ address_t ModuleManager::getModuleExportAddress(	const Module& mod,
 	}
 
 	//Calculate offset, add it to the module address and return
-	address_t offset = exportAddress - reinterpret_cast<ptr_t>(module.get());
+	ptr_t offset = exportAddress - reinterpret_cast<ptr_t>(module.get());
 	return mod.getBaseAddress() + offset;
 }
 

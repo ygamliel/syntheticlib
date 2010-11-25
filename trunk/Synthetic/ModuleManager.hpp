@@ -104,15 +104,15 @@ namespace Synthetic
 		*/
 		dword_t callModuleExport(	const Module& mod,
 											const std::string& exportName,
-											address_t param) const;
+											ptr_t param) const;
 
 		/**
 		* Retrieve an exports address.
 		* @param mod Module which should be queried.
 		* @param exportName Name of the export to search for.
-		* @return address_t Address of the found export.
+		* @return ptr_t Address of the found export.
 		*/
-		address_t getModuleExportAddress(	const Module& mod,
+		ptr_t getModuleExportAddress(	const Module& mod,
 														const std::string& exportName) const;
 
 

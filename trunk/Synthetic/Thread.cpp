@@ -34,7 +34,7 @@ using namespace Synthetic;
 Thread::Thread() : handle_(NULL), id_(0)
 { }
 
-Thread::Thread(ThreadId id) : handle_(NULL), id_(id)
+Thread::Thread(tid_t id) : handle_(NULL), id_(id)
 {
 	open(id);
 }
@@ -56,7 +56,7 @@ Thread::~Thread()
 	close();
 }
 
-void Thread::open(ThreadId id)
+void Thread::open(tid_t id)
 {
 	if(!id)
 		return;
@@ -93,7 +93,7 @@ void Thread::close()
 	handle_ = NULL;
 }
 
-ThreadId Thread::getId() const
+tid_t Thread::getId() const
 {
 	return id_;
 }
@@ -178,7 +178,7 @@ unsigned long Thread::resume() const
 	return suspendedCount;
 }
 
-context_t Thread::getContext(unsigned long contextFlags) const
+CONTEXT Thread::getContext(unsigned long contextFlags) const
 {
 	CONTEXT threadContext;
 	ZeroMemory(&threadContext, sizeof(CONTEXT));
@@ -195,7 +195,7 @@ context_t Thread::getContext(unsigned long contextFlags) const
 	return threadContext;
 }
 
-void Thread::setContext(context_t& newContext, unsigned long contextFlags) const
+void Thread::setContext(CONTEXT& newContext, unsigned long contextFlags) const
 {
 	newContext.ContextFlags = contextFlags;
 
