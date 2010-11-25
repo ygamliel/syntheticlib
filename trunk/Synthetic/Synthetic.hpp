@@ -28,7 +28,7 @@
 #include "Process.hpp"
 #include "ModuleManager.hpp"
 #include "ThreadManager.hpp"
-#include "TlhelpIterator.hpp"
+#include "SysObjectIterator.hpp"
 #include "Allocator.hpp"
 #include "SmartType.hpp"
 #include "WinException.hpp"
