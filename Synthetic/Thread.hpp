@@ -29,7 +29,7 @@
 #include <Windows.h>
 
 //Synthetic Header Files:
-#include "TlhelpIterator.hpp"
+#include "SysObjectIterator.hpp"
 #include "Types.hpp"
 
 namespace Synthetic

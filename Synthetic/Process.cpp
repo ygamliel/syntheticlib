@@ -27,7 +27,7 @@
 
 //Synthetic Header files:
 #include "Process.hpp"
-#include "TlhelpIterator.hpp"
+#include "SysObjectIterator.hpp"
 #include "SmartType.hpp"
 #include "Auxiliary.hpp"
 

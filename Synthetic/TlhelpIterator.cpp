@@ -19,29 +19,29 @@
 */
 
 //Synthetic Header Files:
-#include "TlhelpIterator.hpp"
+#include "SysObjectIterator.hpp"
 
 using namespace Synthetic;
 
-template class TlhelpIterator<	PROCESSENTRY32W,
-											Process32FirstW,
-											Process32NextW,
-											TH32CS_SNAPPROCESS>;
+template class SysObjectIterator<	PROCESSENTRY32W,
+												Process32FirstW,
+												Process32NextW,
+												TH32CS_SNAPPROCESS>;
 
-template class TlhelpIterator<	THREADENTRY32,
-											Thread32First,
-											Thread32Next,
-											TH32CS_SNAPTHREAD>;
+template class SysObjectIterator<	THREADENTRY32,
+												Thread32First,
+												Thread32Next,
+												TH32CS_SNAPTHREAD>;
 
-template class TlhelpIterator<	MODULEENTRY32W,
-											Module32FirstW,
-											Module32NextW,
-											TH32CS_SNAPMODULE>;
+template class SysObjectIterator<	MODULEENTRY32W,
+												Module32FirstW,
+												Module32NextW,
+												TH32CS_SNAPMODULE>;
 
-template class TlhelpIterator<	HEAPLIST32,
-											Heap32ListFirst,
-											Heap32ListNext,
-											TH32CS_SNAPHEAPLIST>;
+template class SysObjectIterator<	HEAPLIST32,
+												Heap32ListFirst,
+												Heap32ListNext,
+												TH32CS_SNAPHEAPLIST>;
 
 /******************
 ******* EOF *******

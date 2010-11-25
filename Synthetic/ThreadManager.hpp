@@ -31,7 +31,7 @@
 //Synthetic header Files:
 #include "Process.hpp"
 #include "Thread.hpp"
-#include "TlhelpIterator.hpp"
+#include "SysObjectIterator.hpp"
 
 namespace Synthetic
 {

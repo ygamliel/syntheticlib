@@ -42,7 +42,7 @@
     <ClCompile Include="Auxiliary.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="Process_Win32.cpp">
+    <ClCompile Include="Process.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -71,9 +71,6 @@
     <ClInclude Include="ThreadManager.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="TlhelpIterator.hpp">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="Types.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -87,6 +84,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="System.hpp">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="SysObjectIterator.hpp">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>

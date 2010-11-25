@@ -22,8 +22,8 @@
 	#pragma once
 #endif
 
-#ifndef SYNTHETIC_TLHELPITERATOR_HPP
-#define SYNTHETIC_TLHELPITERATOR_HPP
+#ifndef SYNTHETIC_SYSOBJECTITERATOR_HPP
+#define SYNTHETIC_SYSOBJECTITERATOR_HPP
 
 //Windows header files:
 #include <Windows.h>
@@ -52,8 +52,8 @@ namespace Synthetic
 					BOOL (__stdcall *func_getfirst)(HANDLE, entry_t*),
 					BOOL (__stdcall *func_getnext)(HANDLE, entry_t*),
 					unsigned long flag_spec>
-	class TlhelpIterator : public std::iterator<	std::input_iterator_tag,
-																entry_t>
+	class SysObjectIterator : public std::iterator<	std::input_iterator_tag,
+																	entry_t>
 	{
 
 	public:
@@ -63,7 +63,7 @@ namespace Synthetic
 		* @param pid Specify a process id for which data should be iterated.
 		* Passing zero will iterate all specific resources on the system.
 		*/
-		TlhelpIterator(pid_t pid)
+		SysObjectIterator(pid_t pid)
 		{
 			//Get a snapshot
 			entry_.dwSize = sizeof(entry_t);
@@ -71,7 +71,7 @@ namespace Synthetic
 			if(snapshot_ == INVALID_HANDLE_VALUE)
 			{
 				DWORD error = GetLastError();
-				throw WinException(	"TlhelpIterator::TlhelpIterator()",
+				throw WinException(	"SysObjectIterator::SysObjectIterator()",
 											"CreateToolhelp32Snapshot()",
 											error);
 			}
@@ -81,7 +81,7 @@ namespace Synthetic
 			if(!state_)
 			{
 				DWORD error = GetLastError();
-				throw WinException(	"TlhelpIterator::TlhelpIterator()",
+				throw WinException(	"SysObjectIterator::SysObjectIterator()",
 											"func_getfirst()",
 											error);
 			}
@@ -92,14 +92,14 @@ namespace Synthetic
 		* Constructing it will create an invalid iterator
 		* for use in loops etc.
 		*/
-		TlhelpIterator() : state_(FALSE), snapshot_(0)
+		SysObjectIterator() : state_(FALSE), snapshot_(0)
 		{ }
 
 		/**
 		* Copyconstructor for deep copy.
-		* @param it TlhelpIterator to copy.
+		* @param it SysObjectIterator to copy.
 		*/
-		TlhelpIterator(const TlhelpIterator& it)
+		SysObjectIterator(const SysObjectIterator& it)
 		{
 			if(!it.isInValidState())
 			{
@@ -117,7 +117,7 @@ namespace Synthetic
 		/**
 		* Simple destructor freeing resources.
 		*/
-		~TlhelpIterator()
+		~SysObjectIterator()
 		{
 			if(snapshot_ != INVALID_HANDLE_VALUE && snapshot_ != 0)
 				CloseHandle(snapshot_);
@@ -136,7 +136,7 @@ namespace Synthetic
 		* Comparison, ONLY checks for validity!
 		* @return true if both objects are in the same state, false otherwise.
 		*/
-		bool operator==(const TlhelpIterator& it) const
+		bool operator==(const SysObjectIterator& it) const
 		{
 			return (isInValidState() == it.isInValidState());
 		}
@@ -145,7 +145,7 @@ namespace Synthetic
 		* Comparison, ONLY checks for validity!
 		* @return True if both objects are in different states, false otherwise.
 		*/
-		bool operator!=(const TlhelpIterator& it) const
+		bool operator!=(const SysObjectIterator& it) const
 		{
 			return !(*this == it);
 		}
@@ -160,7 +160,7 @@ namespace Synthetic
 
 			if(!isInValidState())
 			{
-				throw runtime_error(	"TlhelpIterator::operator*() Error : " \
+				throw runtime_error(	"SysObjectIterator::operator*() Error : " \
 											"Object is in invalid state");
 								
 			}
@@ -178,7 +178,7 @@ namespace Synthetic
 
 			if(!isInValidState())
 			{
-				throw runtime_error(	"TlhelpIterator::operator*() Error : " \
+				throw runtime_error(	"SysObjectIterator::operator*() Error : " \
 											"Object is in invalid state");
 								
 			}
@@ -191,13 +191,13 @@ namespace Synthetic
 		* incremented iterator.
 		* @return Incremented iterator.
 		*/
-		TlhelpIterator& operator++() 
+		SysObjectIterator& operator++() 
 		{
 			using namespace std;
 
 			if(!isInValidState())
 			{
-				throw runtime_error(	"TlhelpIterator::operator++() Error : " \
+				throw runtime_error(	"SysObjectIterator::operator++() Error : " \
 											"Object is in invalid state");
 								
 			}
@@ -212,18 +212,18 @@ namespace Synthetic
 		* previous iterator.
 		* @return Previous iterator.
 		*/
-		TlhelpIterator operator++(int) 
+		SysObjectIterator operator++(int) 
 		{
 			using namespace std;
 
 			if(!isInValidState())
 			{
-				throw runtime_error(	"TlhelpIterator::operator++() Error : " \
+				throw runtime_error(	"SysObjectIterator::operator++() Error : " \
 											"Object is in invalid state");
 								
 			}
 
-			TlhelpIterator result = *this;
+			SysObjectIterator result = *this;
 			++(*this);
 			return result;
 		}
@@ -234,29 +234,29 @@ namespace Synthetic
 		BOOL state_;
 	};
 
-	typedef TlhelpIterator<	PROCESSENTRY32W,
-									Process32FirstW,
-									Process32NextW,
-									TH32CS_SNAPPROCESS>	ProcessIterator;
+	typedef SysObjectIterator<	PROCESSENTRY32W,
+										Process32FirstW,
+										Process32NextW,
+										TH32CS_SNAPPROCESS>	ProcessIterator;
 
-	typedef TlhelpIterator< THREADENTRY32,
-									Thread32First,
-									Thread32Next,
-									TH32CS_SNAPTHREAD>	ThreadIterator;
+	typedef SysObjectIterator< THREADENTRY32,
+										Thread32First,
+										Thread32Next,
+										TH32CS_SNAPTHREAD>	ThreadIterator;
 
-	typedef TlhelpIterator<	MODULEENTRY32W,
-									Module32FirstW,
-									Module32NextW,
-									TH32CS_SNAPMODULE>	ModuleIterator;
+	typedef SysObjectIterator<	MODULEENTRY32W,
+										Module32FirstW,
+										Module32NextW,
+										TH32CS_SNAPMODULE>	ModuleIterator;
 
-	typedef TlhelpIterator<	HEAPLIST32,
-									Heap32ListFirst,
-									Heap32ListNext,
-									TH32CS_SNAPHEAPLIST>	HeapListIterator;
+	typedef SysObjectIterator<	HEAPLIST32,
+										Heap32ListFirst,
+										Heap32ListNext,
+										TH32CS_SNAPHEAPLIST>	HeapListIterator;
 									
 }
 
-#endif //SYNTHETIC_TLHELPITERATOR_HPP
+#endif //SYNTHETIC_SYSOBJECTITERATOR_HPP
 
 /******************
 ******* EOF *******
